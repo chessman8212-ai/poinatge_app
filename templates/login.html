@@ -1,0 +1,13 @@
+
+{% extends "base.html" %}
+{% block content %}
+  <h3>Connexion</h3>
+  <form method="POST">
+    <label>Nom d'utilisateur</label>
+    <input type="text" name="username" required placeholder="admin" />
+    <label>Mot de passe</label>
+    <input type="password" name="password" required placeholder="Mot de passe"/>
+    <button class="btn btn-secondary" type="submit">Se connecter</button>
+  </form>
+  <p style="margin-top:8px; color:#475569; font-size:14px;">Le premier compte admin est créé automatiquement depuis les variables <code>ADMIN_USERNAME</code> et <code>ADMIN_PASSWORD</code>.</p>
+{% endblock %}

@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h3>Saisie du pointage ({{ today }})</h3>
+<form method="POST" autocomplete="on">
+  <label>Nom *</label>
+  <input type="text" name="nom" required placeholder="Nom et Prénom" />
+
+  <label>Service (optionnel)</label>
+  <input type="text" name="service" placeholder="Ex: Maintenance, CC, ..."/>
+
+  <label>Heure d'arrivée *</label>
+  <input type="time" name="arrivee" required />
+
+  <label>Heure de départ (optionnel)</label>
+  <input type="time" name="depart"/>
+
+  <label>Note (optionnel)</label>
+  <textarea name="note" rows="2" placeholder="Observation"></textarea>
+
+  <button class="btn btn-primary" type="submit">Enregistrer</button>
+</form>
+
+{% if rows and rows|length > 0 %}
+  <h4>Pointages du jour</h4>
+  <table>
+    <thead>
+      <tr><th>Nom</th><th>Service</th><th>Arrivée</th><th>Départ</th><th>Note</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          <td>{{ r.nom }}</td>
+          <td>{{ r.service or "" }}</td>
+          <td>{{ r.arrivee }}</td>
+          <td>{{ r.depart or "" }}</td>
+          <td>{{ r.note or "" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}
