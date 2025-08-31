@@ -1,21 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<h3>Créer un utilisateur</h3>
-<form method="POST" autocomplete="off">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<h2>Créer un utilisateur</h2>
 
-  <label>Nom d'utilisateur *</label>
-  <input type="text" name="username" required />
+<div class="card">
+  <form method="POST">
+    <!-- ✅ Champ CSRF obligatoire -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  <label>Mot de passe *</label>
-  <input type="password" name="password" required />
+    <label>Nom d'utilisateur</label>
+    <input type="text" name="username" required placeholder="ex: employe1">
 
-  <label>Rôle</label>
-  <select name="role">
-    <option value="user">Utilisateur</option>
-    <option value="admin">Administrateur</option>
-  </select>
+    <label>Mot de passe</label>
+    <input type="password" name="password" required placeholder="Mot de passe">
 
-  <button class="btn btn-primary" type="submit">Créer</button>
-</form>
+    <label>Rôle</label>
+    <select name="role">
+      <option value="user" selected>Utilisateur</option>
+      <option value="admin">Administrateur</option>
+    </select>
+
+    <button class="btn btn-primary" type="submit">Créer</button>
+  </form>
+</div>
 {% endblock %}
