@@ -3,6 +3,8 @@
 {% block content %}
 <h3>Saisie du pointage ({{ today }})</h3>
 <form method="POST" autocomplete="on">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
   {{ csrf_token() }}
   <label>Nom *</label>
   <input type="text" name="nom" required placeholder="Nom et Prénom" />
