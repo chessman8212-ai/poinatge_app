@@ -12,7 +12,7 @@
         <th>ID</th>
         <th>Nom d'utilisateur</th>
         <th>Rôle</th>
-        <th>Actions</th>
+        <th style="text-align:right;">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -21,23 +21,19 @@
         <td>{{ u.id }}</td>
         <td>{{ u.username }}</td>
         <td>{{ u.role }}</td>
-        <td>
-          {% if u.id != session.get("user_id") %}
-          <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" style="display:inline;">
+        <td style="text-align:right;">
+          <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" 
+                onsubmit="return confirm('Supprimer l’utilisateur {{ u.username }} ?');" style="display:inline-block;">
             {{ csrf_token() }}
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer {{ u.username }} ?');">
-              Supprimer
-            </button>
+            <button class="btn btn-danger" type="submit">Supprimer</button>
           </form>
-          {% else %}
-          (vous)
-          {% endif %}
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </section>
+
 
 <!-- Gestion des pointages -->
 <section>
