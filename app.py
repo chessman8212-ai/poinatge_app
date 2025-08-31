@@ -133,6 +133,20 @@ def admin():
     users = User.query.all()
     return render_template("admin.html", rows=rows, users=users)
 
+@app.route("/delete_user/<int:user_id>", methods=["POST"])
+@admin_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    # empêcher la suppression de soi-même
+    if user.id == session.get("user_id"):
+        flash("Vous ne pouvez pas supprimer votre propre compte.", "error")
+        return redirect(url_for("admin"))
+
+    db.session.delete(user)
+    db.session.commit()
+    flash("Utilisateur supprimé avec succès.", "success")
+    return redirect(url_for("admin"))
+
 @app.route("/export_csv")
 @admin_required
 def export_csv():
