@@ -10,5 +10,6 @@
     <input type="password" name="password" required placeholder="Mot de passe"/>
     <button class="btn btn-secondary" type="submit">Se connecter</button>
   </form>
-  <p style="margin-top:8px; color:#475569; font-size:14px;">Le premier compte admin est créé automatiquement depuis les variables <code>ADMIN_USERNAME</code> et <code>ADMIN_PASSWORD</code>.</p>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
 {% endblock %}
