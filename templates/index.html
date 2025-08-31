@@ -1,22 +1,17 @@
-
 {% extends "base.html" %}
 {% block content %}
 <h3>Saisie du pointage ({{ today }})</h3>
 <form method="POST" autocomplete="on">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  {{ csrf_token() }}
-  <label>Nom *</label>
-  <input type="text" name="nom" required placeholder="Nom et Prénom" />
-
   <label>Service (optionnel)</label>
-  <input type="text" name="service" placeholder="Ex: Maintenance, CC, ..."/>
+  <input type="text" name="service" placeholder="Ex: Maintenance, CC, ..." />
 
   <label>Heure d'arrivée *</label>
   <input type="time" name="arrivee" required />
 
   <label>Heure de départ (optionnel)</label>
-  <input type="time" name="depart"/>
+  <input type="time" name="depart" />
 
   <label>Note (optionnel)</label>
   <textarea name="note" rows="2" placeholder="Observation"></textarea>
