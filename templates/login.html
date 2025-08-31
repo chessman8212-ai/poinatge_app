@@ -1,15 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>Connexion</h3>
-<form method="POST" autocomplete="off">
+<form method="POST">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
   <label>Nom d'utilisateur</label>
-  <input type="text" name="username" required placeholder="admin" />
-
+  <input type="text" name="username" required>
   <label>Mot de passe</label>
-  <input type="password" name="password" required placeholder="Mot de passe"/>
-
-  <button class="btn btn-secondary" type="submit">Se connecter</button>
+  <input type="password" name="password" required>
+  <button type="submit">Connexion</button>
 </form>
 {% endblock %}
