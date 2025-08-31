@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>Créer un utilisateur</h3>
-<form method="POST">
-  {{ csrf_token() }}
+<form method="POST" autocomplete="off">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
   <label>Nom d'utilisateur *</label>
   <input type="text" name="username" required />
 
