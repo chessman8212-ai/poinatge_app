@@ -119,7 +119,11 @@ def index():
         flash("Pointage enregistré.", "success")
         return redirect(url_for("index"))
 
+    if session.get("role") == "admin":
     rows = Pointage.query.filter_by(date=date.today()).all()
+else:
+    rows = Pointage.query.filter_by(date=date.today(), nom=session["username"]).all()
+
     return render_template("index.html", today=date.today(), rows=rows)
 
 @app.route("/admin")
