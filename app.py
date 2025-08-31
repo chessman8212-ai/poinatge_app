@@ -6,6 +6,12 @@ from functools import wraps
 import csv
 from io import StringIO
 from datetime import date
+from flask_wtf.csrf import CSRFProtect, generate_csrf
+CSRFProtect(app)
+
+@app.context_processor
+def csrf_token_processor():
+    return dict(csrf_token=generate_csrf)
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "changeme")
