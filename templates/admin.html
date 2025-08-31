@@ -24,6 +24,8 @@
         <td style="text-align:right;">
           <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" 
                 onsubmit="return confirm('Supprimer l’utilisateur {{ u.username }} ?');" style="display:inline-block;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             {{ csrf_token() }}
             <button class="btn btn-danger" type="submit">Supprimer</button>
           </form>
