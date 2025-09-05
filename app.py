@@ -113,6 +113,16 @@ elif db_url.startswith("postgresql://") and "+psycopg" not in db_url:
 >>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# ... après avoir construit db_url ...
+# Options de pool pour reconnecter automatiquement si la connexion est coupée
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True,    # teste la connexion avant chaque usage, reconnecte si morte
+    "pool_recycle": 300,      # recycle les connexions toutes les 5 min
+    "pool_timeout": 10,       # attente max pour obtenir une connexion du pool
+    "pool_size": 5,           # taille du pool
+    "max_overflow": 10,       # connexions temporaires en plus si pic
+}
+
 
 db = SQLAlchemy(app)
 <<<<<<< HEAD
