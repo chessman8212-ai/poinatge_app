@@ -2,6 +2,7 @@
 {% block content %}
 <h2>Créer un utilisateur</h2>
 
+<<<<<<< HEAD
 <div class="card">
   <form method="POST">
     <!-- ✅ Champ CSRF obligatoire -->
@@ -22,4 +23,22 @@
     <button class="btn btn-primary" type="submit">Créer</button>
   </form>
 </div>
+=======
+<form method="POST" autocomplete="off">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>Nom d'utilisateur *</label>
+  <input type="text" name="username" required />
+
+  <label>Mot de passe *</label>
+  <input type="password" name="password" required />
+
+  <label>Rôle</label>
+  <select name="role">
+    <option value="user" selected>Utilisateur</option>
+    <option value="admin">Administrateur</option>
+  </select>
+
+  <button class="btn btn-primary" type="submit">Créer</button>
+</form>
+>>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 {% endblock %}

@@ -35,6 +35,7 @@
         {% endif %}
       </div>
       <nav>
+<<<<<<< HEAD
         {% if session.get('user_id') %}
           <a href="{{ url_for('index') }}">Formulaire</a>
           {% if session.get('role') == 'admin' %}
@@ -46,6 +47,20 @@
           <a href="{{ url_for('login') }}">Connexion</a>
         {% endif %}
       </nav>
+=======
+  <a href="/">Formulaire</a>
+  {% if is_logged_in %}
+    {% if is_admin %}
+      <a href="/admin">Admin</a>
+      <a href="/export_csv">Exporter CSV</a>
+    {% endif %}
+    <a href="/logout">Déconnexion{% if current_user %} ({{ current_user }}){% endif %}</a>
+  {% else %}
+    <a href="/login">Connexion</a>
+  {% endif %}
+</nav>
+
+>>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
     </header>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

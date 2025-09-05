@@ -1,41 +1,83 @@
 {% extends "base.html" %}
 {% block content %}
+<<<<<<< HEAD
 <h3>Saisie du pointage ({{ today }})</h3>
 <form method="POST" autocomplete="on">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
   <label>Service (optionnel)</label>
   <input type="text" name="service" placeholder="Ex: Maintenance, CC, ..." />
+=======
+<h2>Pointage du {{ selected_date }}</h2>
+
+<form method="GET" action="{{ url_for('index') }}" style="margin-bottom: 10px;">
+  <label>Afficher la date :</label>
+  <input type="date" name="d" value="{{ selected_date.isoformat() }}">
+  <button class="btn btn-secondary" type="submit">Afficher</button>
+</form>
+
+<form method="POST" autocomplete="off">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <label>Date du pointage *</label>
+  <input type="date" name="jour" required value="{{ selected_date.isoformat() }}"/>
+
+  <label>Type / Nature du pointage *</label>
+  <select name="service" required>
+    <option value="" disabled>— Sélectionner —</option>
+    <option value="TC">Travaux centre</option>
+    <option value="RC">Repos compensateur</option>
+    <option value="DEP">Déplacement</option>
+    <option value="PE">Permission exceptionnelle</option>
+    <option value="CONGE">Congé</option>
+    <option value="MAL">Maladie</option>
+    <option value="FORM">Formation</option>
+    <option value="AST">Astreinte</option>
+    <option value="FERIE">Jour férié</option>
+    <option value="RTT">RTT</option>
+    <option value="AUTRE">Autre</option>
+  </select>
+>>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 
   <label>Heure d'arrivée *</label>
   <input type="time" name="arrivee" required />
 
+<<<<<<< HEAD
   <label>Heure de départ (optionnel)</label>
+=======
+  <label>Heure de départ</label>
+>>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
   <input type="time" name="depart" />
 
-  <label>Note (optionnel)</label>
-  <textarea name="note" rows="2" placeholder="Observation"></textarea>
+  <label>Note</label>
+  <textarea name="note"></textarea>
 
   <button class="btn btn-primary" type="submit">Enregistrer</button>
 </form>
 
-{% if rows and rows|length > 0 %}
-  <h4>Pointages du jour</h4>
-  <table>
-    <thead>
-      <tr><th>Nom</th><th>Service</th><th>Arrivée</th><th>Départ</th><th>Note</th></tr>
-    </thead>
-    <tbody>
-      {% for r in rows %}
-        <tr>
-          <td>{{ r.nom }}</td>
-          <td>{{ r.service or "" }}</td>
-          <td>{{ r.arrivee }}</td>
-          <td>{{ r.depart or "" }}</td>
-          <td>{{ r.note or "" }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+<h3 style="margin-top:24px;">Mes pointages ({{ selected_date }})</h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Type / Nature</th>
+      <th>Arrivée</th>
+      <th>Départ</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>{{ r.jour }}</td>
+      <td>{{ POINTAGE_TYPES.get(r.service or "", r.service or "") }}</td>
+      <td>{{ format_time(r.arrivee) }}</td>
+      <td>{{ format_time(r.depart) }}</td>
+      <td>{{ r.note or "" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

@@ -1,25 +1,28 @@
-# Utiliser Python 3.12 (stable, wheels dispo pour psycopg2-binary)
-FROM python:3.12-slim
+# Image légère et récente
+FROM python:3.13-slim
 
-# Définir le dossier de travail
-WORKDIR /app
+# Empêche Python de bufferiser la sortie (logs visibles)
+ENV PYTHONUNBUFFERED=1
 
-# Installer dépendances système minimales
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential gcc libpq-dev curl \
-    && rm -rf /var/lib/apt/lists/*
+# Dossier de travail
+WORKDIR /code
 
-# Copier les fichiers de dépendances
+# Déps système minimales (certs, locales…)
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copier et installer les dépendances Python
 COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
-# Installer les dépendances Python
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
-
-# Copier tout le code de l’application
+# Copier le code de l’app
 COPY . .
 
-# Définir la variable PORT (Fly l’injecte de toute façon)
-ENV PORT=8080
+# Fly route le trafic vers ce port interne
+EXPOSE 8080
 
-# Commande de démarrage en production avec Gunicorn
-CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT} --workers 2 --threads 4"]
+# Lancer avec Gunicorn (prod, 2 workers suffisent pour démarrer)
+# "app:app" = module:fla sk_app
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:8080", "app:app"]
