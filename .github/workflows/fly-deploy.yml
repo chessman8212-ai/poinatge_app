@@ -2,8 +2,8 @@ name: Deploy to Fly.io
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch: {}
+    branches: [ "main" ]   # déploiement automatique à chaque push sur main
+  workflow_dispatch: {}     # possibilité de lancer manuellement depuis l’onglet Actions
 
 permissions:
   contents: read
@@ -16,25 +16,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # Installe l’outil flyctl
       - name: Setup flyctl
         uses: superfly/flyctl-actions/setup-flyctl@v1
 
-      # (Optionnel) Vérifier la config
-      - name: Validate Fly config
-        run: flyctl config validate
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
-      # Déploiement
-      - name: Deploy
+      - name: Deploy app to Fly.io
         run: |
-          flyctl deploy \
-            --remote-only \
-            --app pointage-internet-webapp \
-            --strategy immediate
+          flyctl deploy --remote-only --app pointage-internet-webapp --strategy immediate
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
