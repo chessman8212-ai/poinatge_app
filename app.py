@@ -29,6 +29,7 @@ app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 # ------------------------------------------------------------------------------
 # Base de données (Postgres/SQLite)
 # ------------------------------------------------------------------------------
+# --- Base de données (Postgres/SQLite) ---
 db_url = os.getenv("DATABASE_URL", "sqlite:///pointage.db")
 
 # Compat Postgres → psycopg3
@@ -36,8 +37,7 @@ if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
-
-# Si on est en Postgres, assure un sslmode explicite (Fly attache parfois sslmode=disable)
+# sslmode explicite si manquant (utile en prod Fly). En local SQLite, ça ne s'applique pas.
 if db_url.startswith("postgresql+psycopg://") and "sslmode=" not in db_url:
     sep = "&" if "?" in db_url else "?"
     db_url = f"{db_url}{sep}sslmode=disable"
@@ -45,22 +45,36 @@ if db_url.startswith("postgresql+psycopg://") and "sslmode=" not in db_url:
 app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Pool robuste (reconnexion auto)
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_pre_ping": True,
-    "pool_recycle": 300,   # recycle les connexions toutes les 5 min
-    "pool_timeout": 10,
-    "pool_size": 5,
-    "max_overflow": 10,
-    "connect_args": {
-        "connect_timeout": 5,
-        # Keepalives TCP (transmis à libpq)
-        "keepalives": 1,
-        "keepalives_idle": 30,
-        "keepalives_interval": 10,
-        "keepalives_count": 5,
-    },
-}
+# --- Engine options adaptées ---
+engine_opts = {}
+
+if db_url.startswith("postgresql+psycopg://"):
+    # Options utiles pour Postgres (prod Fly)
+    engine_opts = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+        "pool_timeout": 10,
+        "pool_size": 5,
+        "max_overflow": 10,
+        "connect_args": {
+            "connect_timeout": 5,
+            "keepalives": 1,
+            "keepalives_idle": 30,
+            "keepalives_interval": 10,
+            "keepalives_count": 5,
+        },
+    }
+elif db_url.startswith("sqlite:///") or db_url.startswith("sqlite://"):
+    # SQLite : ne PAS passer d'arguments Postgres
+    # Optionnel: autoriser l'accès multi-threads si besoin
+    engine_opts = {
+        "pool_pre_ping": True,
+        "connect_args": {"check_same_thread": False},
+    }
+
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = engine_opts
+
+
 
 db = SQLAlchemy(app)
 csrf = CSRFProtect(app)

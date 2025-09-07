@@ -1,0 +1,11 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Env
+.venv/
+.env
+
+# Flask instance (DB locale, secrets…)
+instance/
