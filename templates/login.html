@@ -1,26 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>Connexion</h3>
-<<<<<<< HEAD
 <form method="POST">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="next" value="{{ next_url or request.args.get('next','') }}">
   <label>Nom d'utilisateur</label>
-  <input type="text" name="username" required>
+  <input type="text" name="username" required placeholder="admin" autocomplete="username" />
   <label>Mot de passe</label>
-  <input type="password" name="password" required>
-  <button type="submit">Connexion</button>
-</form>
-=======
-<form method="POST" autocomplete="off">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-  <label>Nom d'utilisateur</label>
-  <input type="text" name="username" required placeholder="admin" />
-  <label>Mot de passe</label>
-  <input type="password" name="password" required placeholder="Mot de passe"/>
+  <input type="password" name="password" required placeholder="••••••••" autocomplete="current-password"/>
   <button class="btn btn-secondary" type="submit">Se connecter</button>
 </form>
 <p style="margin-top:8px; color:#475569; font-size:14px;">
-  Le premier compte admin est créé automatiquement depuis <code>ADMIN_USERNAME</code> / <code>ADMIN_PASSWORD</code>.
+  Le premier compte admin peut être créé via les variables <code>ADMIN_USERNAME</code> et <code>ADMIN_PASSWORD</code>,
+  ou avec le script de réinitialisation.
 </p>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 {% endblock %}

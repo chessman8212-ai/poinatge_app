@@ -1,66 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#2563eb">
+  <link rel="icon" href="/static/icon-192.png">
   <title>Pointage</title>
   <style>
-    body { font-family: system-ui, Arial, sans-serif; margin:20px; background:#f8fafc; }
+    body { font-family: system-ui, Arial, sans-serif; margin: 20px; background:#f8fafc; }
+    header { display:flex; gap:12px; align-items:center; justify-content:space-between; }
     .container { max-width: 1100px; margin: 0 auto; }
-    header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    nav a { margin-right:10px; text-decoration:none; color:#2563eb; }
-    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+    form, table { width:100%; }
+    input, select, textarea { padding:8px; margin:6px 0; width:100%; box-sizing:border-box; }
+    button, .btn { padding:10px 14px; border:none; cursor:pointer; border-radius:8px; }
+    .btn-primary { background:#2563eb; color:white; }
+    .btn-danger { background:#dc2626; color:white; }
+    .btn-secondary { background:#334155; color:white; }
+    .card { padding:16px; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.06); margin: 12px 0; background:white; }
     .flash { padding:10px; border-radius:8px; margin:8px 0; }
     .flash.success { background:#ecfdf5; color:#065f46; }
     .flash.error { background:#fef2f2; color:#991b1b; }
-    input, select, textarea { width:100%; padding:8px; margin:6px 0; box-sizing:border-box; }
-    button, .btn { border:none; border-radius:8px; padding:10px 14px; cursor:pointer; }
-    .btn-primary { background:#2563eb; color:white; }
-    .btn-secondary { background:#334155; color:white; }
-    .btn-danger { background:#dc2626; color:white; }
-    table { width:100%; border-collapse:collapse; margin-top:12px; background:white; }
+    table { border-collapse: collapse; margin-top:12px; background:white; }
     th, td { border:1px solid #e5e7eb; padding:8px; text-align:left; }
     th { background:#eef2ff; }
     .right { text-align:right; }
+    nav a { margin-right:10px; text-decoration:none; color:#2563eb; }
     .pill { background:#e0e7ff; color:#1e3a8a; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .muted { color:#475569; font-size:13px; }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <div style="display:flex; gap:10px; align-items:center;">
+      <div style="display:flex; align-items:center; gap:12px;">
         <h2>🏷️ Pointage</h2>
-        {% if session.get('role') == 'admin' %}
-          <span class="pill">Admin</span>
-        {% endif %}
+        {% if session.get('role') == 'admin' %}<span class="pill">Admin</span>{% endif %}
       </div>
       <nav>
-<<<<<<< HEAD
         {% if session.get('user_id') %}
           <a href="{{ url_for('index') }}">Formulaire</a>
           {% if session.get('role') == 'admin' %}
             <a href="{{ url_for('admin') }}">Admin</a>
-            <a href="{{ url_for('export_csv') }}">Export CSV</a>
+            <a href="{{ url_for('export_csv') }}">Exporter CSV</a>
           {% endif %}
-          <a href="{{ url_for('logout') }}">Déconnexion ({{ session.get('username') }})</a>
+          <span class="pill">{{ session.get('username') }}</span>
+          <a href="{{ url_for('logout') }}">Déconnexion</a>
         {% else %}
           <a href="{{ url_for('login') }}">Connexion</a>
         {% endif %}
       </nav>
-=======
-  <a href="/">Formulaire</a>
-  {% if is_logged_in %}
-    {% if is_admin %}
-      <a href="/admin">Admin</a>
-      <a href="/export_csv">Exporter CSV</a>
-    {% endif %}
-    <a href="/logout">Déconnexion{% if current_user %} ({{ current_user }}){% endif %}</a>
-  {% else %}
-    <a href="/login">Connexion</a>
-  {% endif %}
-</nav>
-
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
     </header>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -74,6 +62,7 @@
     <div class="card">
       {% block content %}{% endblock %}
     </div>
+    <p class="muted">© Pointage App</p>
   </div>
 </body>
 </html>

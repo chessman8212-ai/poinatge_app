@@ -1,44 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Créer un utilisateur</h2>
-
-<<<<<<< HEAD
-<div class="card">
-  <form method="POST">
-    <!-- ✅ Champ CSRF obligatoire -->
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-    <label>Nom d'utilisateur</label>
-    <input type="text" name="username" required placeholder="ex: employe1">
-
-    <label>Mot de passe</label>
-    <input type="password" name="password" required placeholder="Mot de passe">
-
-    <label>Rôle</label>
-    <select name="role">
-      <option value="user" selected>Utilisateur</option>
-      <option value="admin">Administrateur</option>
-    </select>
-
-    <button class="btn btn-primary" type="submit">Créer</button>
-  </form>
-</div>
-=======
-<form method="POST" autocomplete="off">
+<h3>Créer un utilisateur</h3>
+<form method="POST">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-  <label>Nom d'utilisateur *</label>
-  <input type="text" name="username" required />
+  <label>Nom d'utilisateur</label>
+  <input type="text" name="username" required placeholder="ex: jdupont">
 
-  <label>Mot de passe *</label>
-  <input type="password" name="password" required />
+  <label>Mot de passe</label>
+  <input type="password" name="password" required placeholder="••••••••">
 
   <label>Rôle</label>
   <select name="role">
-    <option value="user" selected>Utilisateur</option>
+    <option value="user">Utilisateur</option>
     <option value="admin">Administrateur</option>
   </select>
 
-  <button class="btn btn-primary" type="submit">Créer</button>
+  <div class="right">
+    <button class="btn btn-primary" type="submit">Créer</button>
+  </div>
 </form>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 {% endblock %}

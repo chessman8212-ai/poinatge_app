@@ -2,16 +2,7 @@
 {% block content %}
 <h2>Tableau de bord Administrateur</h2>
 
-<<<<<<< HEAD
-=======
-<form method="GET" action="{{ url_for('admin') }}" style="margin: 12px 0;">
-  <label>Afficher les pointages du :</label>
-  <input type="date" name="d" value="{{ selected_date.isoformat() }}">
-  <button class="btn btn-secondary" type="submit">Afficher</button>
-</form>
-
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
-<section style="margin-bottom:20px;">
+<section class="card">
   <h3>Utilisateurs</h3>
   <a href="{{ url_for('register') }}" class="btn btn-primary">+ Ajouter un utilisateur</a>
   <table>
@@ -30,42 +21,30 @@
         <td>{{ u.username }}</td>
         <td>{{ u.role }}</td>
         <td class="right">
-<<<<<<< HEAD
           <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" onsubmit="return confirm('Supprimer l’utilisateur {{ u.username }} ?');" style="display:inline-block;">
-=======
-          <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}"
-                onsubmit="return confirm('Supprimer l’utilisateur {{ u.username }} ?');"
-                style="display:inline-block;">
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-danger" type="submit">Supprimer</button>
           </form>
         </td>
       </tr>
       {% endfor %}
+      {% if users|length == 0 %}
+      <tr><td colspan="4" class="muted">Aucun utilisateur.</td></tr>
+      {% endif %}
     </tbody>
   </table>
 </section>
 
-<section>
-<<<<<<< HEAD
-  <h3>Pointages</h3>
+<section class="card">
+  <h3>Pointages du jour</h3>
   <a href="{{ url_for('export_csv') }}" class="btn btn-secondary">Exporter en CSV</a>
-=======
-  <h3>Pointages — {{ selected_date }}</h3>
-  <a href="{{ url_for('export_csv', d=selected_date.isoformat()) }}" class="btn btn-secondary">Exporter en CSV (ce jour)</a>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
   <table>
     <thead>
       <tr>
         <th>ID</th>
         <th>Date</th>
         <th>Nom</th>
-<<<<<<< HEAD
-        <th>Service</th>
-=======
-        <th>Type / Nature</th>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
+        <th>Nature</th>
         <th>Arrivée</th>
         <th>Départ</th>
         <th>Note</th>
@@ -78,29 +57,21 @@
         <td>{{ r.id }}</td>
         <td>{{ r.jour }}</td>
         <td>{{ r.nom }}</td>
-<<<<<<< HEAD
         <td>{{ r.service or "" }}</td>
-        <td>{{ r.arrivee }}</td>
-        <td>{{ r.depart or "" }}</td>
+        <td>{{ r.arrivee.strftime('%H:%M') if r.arrivee else "" }}</td>
+        <td>{{ r.depart.strftime('%H:%M') if r.depart else "" }}</td>
         <td>{{ r.note or "" }}</td>
         <td class="right">
           <form method="POST" action="{{ url_for('delete_pointage', pid=r.id) }}" onsubmit="return confirm('Supprimer ce pointage ?');" style="display:inline-block;">
-=======
-        <td>{{ POINTAGE_TYPES.get(r.service or "", r.service or "") }}</td>
-        <td>{{ format_time(r.arrivee) }}</td>
-        <td>{{ format_time(r.depart) }}</td>
-        <td>{{ r.note or "" }}</td>
-        <td class="right">
-          <form method="POST" action="{{ url_for('delete_pointage', pid=r.id, d=selected_date.isoformat()) }}"
-                onsubmit="return confirm('Supprimer ce pointage ?');"
-                style="display:inline-block;">
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-danger" type="submit">Supprimer</button>
           </form>
         </td>
       </tr>
       {% endfor %}
+      {% if rows|length == 0 %}
+      <tr><td colspan="8" class="muted">Aucun pointage aujourd’hui.</td></tr>
+      {% endif %}
     </tbody>
   </table>
 </section>

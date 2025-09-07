@@ -1,67 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-<<<<<<< HEAD
-<h3>Saisie du pointage ({{ today }})</h3>
-<form method="POST" autocomplete="on">
+<h3>Formulaire de pointage</h3>
+
+<form method="POST">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-  <label>Service (optionnel)</label>
-  <input type="text" name="service" placeholder="Ex: Maintenance, CC, ..." />
-=======
-<h2>Pointage du {{ selected_date }}</h2>
+  <label>Date</label>
+  <input type="date" name="jour" value="{{ today.isoformat() }}" required>
 
-<form method="GET" action="{{ url_for('index') }}" style="margin-bottom: 10px;">
-  <label>Afficher la date :</label>
-  <input type="date" name="d" value="{{ selected_date.isoformat() }}">
-  <button class="btn btn-secondary" type="submit">Afficher</button>
-</form>
+  <label>Nom et prénom</label>
+  <input type="text" name="nom" required placeholder="Nom et prénom">
 
-<form method="POST" autocomplete="off">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-  <label>Date du pointage *</label>
-  <input type="date" name="jour" required value="{{ selected_date.isoformat() }}"/>
-
-  <label>Type / Nature du pointage *</label>
-  <select name="service" required>
-    <option value="" disabled>— Sélectionner —</option>
-    <option value="TC">Travaux centre</option>
-    <option value="RC">Repos compensateur</option>
-    <option value="DEP">Déplacement</option>
-    <option value="PE">Permission exceptionnelle</option>
-    <option value="CONGE">Congé</option>
-    <option value="MAL">Maladie</option>
-    <option value="FORM">Formation</option>
-    <option value="AST">Astreinte</option>
-    <option value="FERIE">Jour férié</option>
-    <option value="RTT">RTT</option>
-    <option value="AUTRE">Autre</option>
+  <label>Nature / Service</label>
+  <select name="service">
+    <option value="">-- Sélectionner --</option>
+    {% for nat in natures %}
+      <option value="{{ nat }}">{{ nat }}</option>
+    {% endfor %}
   </select>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 
-  <label>Heure d'arrivée *</label>
-  <input type="time" name="arrivee" required />
-
-<<<<<<< HEAD
-  <label>Heure de départ (optionnel)</label>
-=======
-  <label>Heure de départ</label>
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
-  <input type="time" name="depart" />
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+    <div>
+      <label>Arrivée (24h)</label>
+      <input type="time" name="arrivee" required step="60" placeholder="08:00">
+    </div>
+    <div>
+      <label>Départ (24h)</label>
+      <input type="time" name="depart" step="60" placeholder="17:00">
+    </div>
+  </div>
 
   <label>Note</label>
-  <textarea name="note"></textarea>
+  <textarea name="note" rows="3" placeholder="Observation (optionnel)"></textarea>
 
-  <button class="btn btn-primary" type="submit">Enregistrer</button>
+  <div class="right">
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+  </div>
 </form>
 
-<h3 style="margin-top:24px;">Mes pointages ({{ selected_date }})</h3>
+<h4 style="margin-top:18px;">Pointages du {{ today.strftime('%d/%m/%Y') }}</h4>
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th>Date</th>
-      <th>Type / Nature</th>
+      <th>Nom</th>
+      <th>Nature</th>
       <th>Arrivée</th>
       <th>Départ</th>
       <th>Note</th>
@@ -71,13 +54,16 @@
     {% for r in rows %}
     <tr>
       <td>{{ r.id }}</td>
-      <td>{{ r.jour }}</td>
-      <td>{{ POINTAGE_TYPES.get(r.service or "", r.service or "") }}</td>
-      <td>{{ format_time(r.arrivee) }}</td>
-      <td>{{ format_time(r.depart) }}</td>
+      <td>{{ r.nom }}</td>
+      <td>{{ r.service or "" }}</td>
+      <td>{{ r.arrivee.strftime('%H:%M') if r.arrivee else "" }}</td>
+      <td>{{ r.depart.strftime('%H:%M') if r.depart else "" }}</td>
       <td>{{ r.note or "" }}</td>
     </tr>
     {% endfor %}
+    {% if rows|length == 0 %}
+    <tr><td colspan="6" class="muted">Aucun pointage pour ce jour.</td></tr>
+    {% endif %}
   </tbody>
 </table>
 {% endblock %}
