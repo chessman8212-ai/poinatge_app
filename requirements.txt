@@ -1,11 +1,5 @@
 Flask==3.0.3
 Flask-WTF==1.2.1
 Flask-SQLAlchemy==3.1.1
-SQLAlchemy==2.0.32
-<<<<<<< HEAD
-psycopg2-binary==2.9.7
-=======
 psycopg[binary]==3.2.9
->>>>>>> 4a314f4 (Refonte app + templates (date, types, HH:MM, PRG, CSV))
 python-dotenv==1.0.1
-gunicorn==23.0.0
