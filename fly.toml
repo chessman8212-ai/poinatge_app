@@ -1,10 +1,39 @@
 app = "pointage-internet-webapp"
+
 primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = "stop"
-  auto_start_machines = true
-  min_machines_running = 1
+  auto_stop_machines = "off"      # Ne pas couper automatiquement
+  auto_start_machines = true      # Redémarrage auto en cas de trafic
+  min_machines_running = 1        # Toujours garder 1 machine active
   processes = ["app"]
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+[checks]
+  [checks.http]
+    type     = "http"
+    port     = 8080
+    interval = "15s"
+    timeout  = "3s"
+    grace_period = "10s"
+    path     = "/"
